@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&family=Dancing+Script:wght@700&family=Great+Vibes&family=PT+Sans:wght@400;700&family=Roboto:wght@300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+<title>Rock, Paper, Scissors</title>
+<style>
+    #main {
+    background-color: #222;
+    color: white;
+    font-family: PT Sans;
+    height: 100vh;
+    width: 101%;
+    margin: -8px 0 0 -8px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    }
+
+    #test {
+        background-color: red;
+        height: 500px;
+        width: 500px;
+        display: flex;
+    }
+
+    #img-div {
+        height: 40%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    img {
+        height: 100%;
+        width: auto;
+    }
+
+    #spacing {
+        height: 5%;
+    }
+
+    #button-div {
+        height: 50px;
+        width: 50px;
+    }
+
+    #challenge {
+        height: auto;
+        width: auto;
+        font-size: 30px;
+        color: white;
+        font-family: Jost;
+    }
+
+    #play-button {
+        height: auto;
+        width: auto;
+        background-color: rgba(0, 183, 255, 0.815);
+        font-size: 30px;
+        padding: 0.2em 0.3em 0.2em 0.3em;
+        border-top-left-radius: 5%;
+        border-top-right-radius: 5%;
+        border-bottom-left-radius: 5%;
+        border-bottom-right-radius: 5%;
+        color: white;
+        font-family: Jost;
+    }
+</style>
+<script>
+    document.getElementById("play-button").addEventListener("click",  function(){alert("Hello world")});
+     
+function randomInt() {
+	let min = 0; 
+    	let max = 3;  
+    	let result = Math.floor(Math.random() * (+max - +min)) + +min;
+	return result;
+}
+
+function computerSelection() {
+	let choice = randomInt();
+	switch (choice) {
+		case 0: move = "rock";
+		break;
+		case 1: move = "paper";
+		break;
+		case 2: move = "scissors";
+		break;
+	}
+	return move;
+}
+
+function playerSelection() {
+	let choice = prompt("Rock, paper, or scissors?", "");
+	let usableChoice = choice.toLowerCase();
+	return usableChoice;
+}
+
+function round(scores) {
+	let playerMove = playerSelection();
+	let computerMove = computerSelection();
+	if (playerMove == "rock" && computerMove == "paper")
+		{scores[1]++;
+        alert(`Computer used paper! Computer wins!\nPlayer\'s score is: ${scores[0]}. Computer\'s score is: ${scores[1]}.`)}
+	else if (playerMove == "rock" && computerMove == "scissors")
+		{scores[0]++;
+        alert(`Computer used scissors! Player wins!\nPlayer\'s score is: ${scores[0]}. Computer\'s score is: ${scores[1]}.`)}
+	else if (playerMove == "scissors" && computerMove == "rock")
+		{scores[1]++;
+        alert(`Computer used rock! Computer wins.\nPlayer\'s score is: ${scores[0]}. Computer\'s score is: ${scores[1]}.`)}
+	else if (playerMove == "scissors" && computerMove == "paper")
+		{scores[0]++;
+        alert(`Computer used paper! Player wins!\nPlayer\'s score is: ${scores[0]}. Computer\'s score is: ${scores[1]}.`)}
+	else if (playerMove == "paper" && computerMove == "scissors")
+		{scores[1]++;
+        alert(`Computer used scissors! Computer wins.\nPlayer\'s score is: ${scores[0]}. Computer\'s score is: ${scores[1]}.`)}
+	else if (playerMove == "paper" && computerMove == "rock")
+		{scores[0]++;
+        alert(`Computer used rock! Player wins!\nPlayer\'s score is: ${scores[0]}. Computer\'s score is: ${scores[1]}.`)}
+	else if (playerMove == "gun")
+		{scores[0] += 5;
+        alert(`Whoa, put down the gun! You win!` /* \nPlayer\'s score is: ${scores[0]}. Computer\'s score is: ${scores[1]}.`*/)} 
+    else if (playerMove == "penis" || playerMove == "dick" || playerMove == "cock" || playerMove == "knob")
+            {scores[0] += 55;
+            alert("*slobs on the knob like corn on the cob*")}
+    else if (playerMove == "nuke")
+            {scores[0] += 55;
+            alert("[Everyone disliked that.]")}
+    else if (playerMove == "paul")
+            {scores[0] += 55;
+            alert("He\'s an incredible fella I tell you what.")}
+    else if (playerMove == "louis")
+        {scores[0] += 55;
+        alert("OPPAN GANGNAM STYLE!")}
+    else if (playerMove == "jack")
+        {scores[0] += 55;
+        alert("You think of something to put here, you\'re the one that comes up with all the good memes.")}
+    else if (playerMove == "brian")
+        {scores[0] += 55;
+        alert("Did you mean: Bruiser")}
+    else if (playerMove == "eoin")
+            {scores[0] += 55;
+            alert("To play rock, paper, scissors by your side,\nIs such a heavenly way to play.")}
+    else if (playerMove == "michael")
+            {scores[0] += 55;
+            alert("Literally the sexiest man alive- I should know, I\'m a computer.")}
+    else if (playerMove == "mark" || playerMove == "jabroni")
+            {scores[0] += 55;
+            alert("Goodnight HULKAMANIACS and jabronie marks without a life that don\'t know it a work when you work a work and work yourself into a shoot,marks")}
+	else {alert(`Computer used ${computerMove}! It\'s a tie!\nPlayer\'s score is: ${scores[0]}. Computer\'s score is: ${scores[1]}.`)};
+	/* alert(`Player\'s score is: ${scores[0]}. Computer\'s score is: ${scores[1]}.`); */
+	return scores;
+}
+
+function game() {
+	let playerScore = 0;
+	let computerScore = 0;
+	let scores = [playerScore, computerScore];
+    for (var i =0; i < 5; i++) {
+	    if (scores[0] < 5) {round(scores)}
+        else if (scores[0] >= 5) {break}
+    }
+	if (scores[0] > scores[1] && !(score[0] > 50)) {alert("PLAYER BEAT THE COMPUTER!")}
+    else if (scores[0] > 50) {}
+	else if (scores[1] > scores[0]) {alert("Player has been defeated by the computer...")}
+	else {alert("Player and computer are evenly matched. Play again?")}
+}
+
+function helloWorld() {
+    for (var i =0; i < 5; i++)
+    alert("Hello");
+}
+</script>
+</head>
+<body>
+    <div id="main">
+        <div id="spacing"></div>
+        <div id="img-div">
+            <img src="https://image.freepik.com/free-vector/evil-robot-that-has-broken-bad-behavior-flat-character-vector-illustration_124715-185.jpg">
+        <!----
+        <div id="button-div">
+            <input type="button" id="play-button">
+            CLICK HERE
+        </input>
+        </div> -->
+        </div>
+        <div id="spacing"></div>
+        <div id="challenge">THE ROBOT CHALLENGES YOU TO ROCK, PAPER, SCISSORS...</div>
+        <div id="spacing"></div>
+        <button type="button" id="play-button" onclick="game()">
+            PLAY
+        </button>
+    </div>
+</body>
+</html>
