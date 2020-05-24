@@ -4,13 +4,27 @@
         <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&family=Dancing+Script:wght@700&family=Great+Vibes&family=PT+Sans:wght@400;700&family=Roboto:wght@300&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
         <style>
+    @font-face {
+        font-family: dseg;
+        src: url("dseg/DSEG7Classic-Regular.ttf")
+    }
+
+    @font-face {
+    font-family: dseg14;
+    src: url("dseg/DSEG14Classic-Bold.ttf")
+    }
+
+    body,html {
+        margin: 0;
+        padding: 0;
+    }
+
     #main {
     background-color: #222;
     color: white;
     font-family: PT Sans;
     height: 100vh;
-    width: 101%;
-    margin: -8px 0 0 -8px;
+    width: 100%;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -72,49 +86,105 @@
         background-color: black;
         font-size: 20px;
         padding: 0.2em 0.3em 0.2em 0.3em;
-        margin: 0px 0px 5px 0px;
+        margin: 0 20% auto 20%;
         border-top-left-radius: 5%;
         border-top-right-radius: 5%;
         border-bottom-left-radius: 5%;
         border-bottom-right-radius: 5%;
     }
 
-    #playByPlay {
-        height: 35%;
-        width: 30%;
-        margin: 0px 20px 20px 20px;
-        background-color: black;
-        align-self: flex-start;
-        border: 1px solid white;
-        border-top-left-radius: 5%;
-        border-top-right-radius: 5%;
-        border-bottom-left-radius: 5%;
-        border-bottom-right-radius: 5%;
-        position: absolute;
-        top: 60%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .commentary {
-        height: 33.33333%;
+    #playBox {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        grid-template-areas: 
+        ". . playerLabel playerLabel rock rock computerLabel computerLabel . ."
+        ". . player player paper paper computer computer . ."
+        ". . player player scissors scissors computer computer . ."
+        ". . player player reset reset computer computer . ."
+        ". . . plays plays plays plays . . .";
+        grid-gap: 2% 0;
         width: 100%;
-        border-bottom: 1px white;
+        margin: 0 0 2.5% 0;
     }
 
-    #computerScore {
-        height: 30%;
-        width: 20%;
-        background-color: black;
-        align-self: flex-end;
+    .scores {
+        height: auto;
+        width: auto;
+        color: rgb(0, 114, 0);
+        font-family: dseg;
+        font-size: 100px;
+        text-align: center;
+        top: 40%;
         border: 1px solid white;
-        border-top-left-radius: 5%;
-        border-top-right-radius: 5%;
-        border-bottom-left-radius: 5%;
-        border-bottom-right-radius: 5%;
-        position: absolute;
-        top: 60%;
-        right: 20px;
+        background-color: black;
+    }
+
+    .scoreLabel {
+        height: auto;
+        width: auto;
+        color: rgb(0, 114, 0);
+        font-size: 20px;
+        font-family: dseg;
+        border: 1px solid white;
+        background-color: black;
+    }
+
+    #computerScoreBox {
+        grid-area: computer;
+    }
+
+    #computerScoreLabel {
+        height: auto;
+        width: auto;
+        color: rgb(0, 114, 0);
+        font-family: dseg14;
+        font-size: 25px;
+        border: 1px solid white;
+        background-color: black;
+        grid-area: computerLabel;
+    }
+
+    #playerScoreBox {
+        grid-area: player;
+    }
+
+    #playerScoreLabel {
+        height: auto;
+        width: auto;
+        color: rgb(0, 114, 0);
+        font-family: dseg14;
+        font-size: 25px;
+        border: 1px solid white;
+        background-color: black;
+        grid-area: playerLabel;
+    }
+
+    #rock {
+        grid-area: rock;
+    }
+    
+    #paper {
+        grid-area: paper;
+    }
+
+    #scissors {
+        grid-area: scissors;
+    }
+
+    #reset {
+        grid-area: reset;
+    }
+
+    #plays {
+        grid-area: plays;
+        height: auto;
+        width: auto;
+        color: white;
+        font-family: Jost;
+        font-size: 20px;
+        border: 1px solid white;
+        background-color: black;
     }
         </style>
     </head>
@@ -133,135 +203,141 @@
             </button>
         </div>
         <div id="spacing"></div>
-        <div style="display: flex; flex-direction: column;">
+        <div id="playBox">
+            <div id="plays"></div>
+            <div id="playerScoreLabel"></div>
+            <div class="scores" id="playerScoreBox"></div>
             <button class="option" id="rock">Rock</button>
             <button class="option" id="paper">Paper</button>
             <button class="option" id="scissors">Scissors</button>
-        </div>
-        <div id="playByPlay">
-            <div id="scoreboard" class="commentary"></div>
-            <div class="commentary"></div>
-            <div class="commentary"></div>
+            <button class="option" id="reset">RESET</button>
+            <div id="computerScoreLabel"></div>
+            <div class="scores" id="computerScoreBox"></div>
         </div>
         </div>
     <script>
-        let playerScore = 0;
-        let computerScore = 0;
-        let scores = [playerScore, computerScore];
+    let playerScore = 0;
+    let computerScore = 0;
+    let scores = [playerScore, computerScore];
 
-        function makeComputerMove() {
-            let max = 3;
-            let number = Math.floor(Math.random() * max);
-            if (number == 2) {result = "scissors"}
-            else if (number == 1) {result = "paper"}
-            else if (number == 0) {result = "rock"}
-            else {alert("wtf lol")}
-            return result;
+    const rock = document.getElementById("rock");
+    const paper = document.getElementById("paper");
+    const scissors = document.getElementById("scissors");
+    const play = document.getElementById("playButton");
+    const playerScoreLabel = document.getElementById("playerScoreLabel");
+    const playerScoreBox = document.getElementById("playerScoreBox");
+    const computerScoreBox = document.getElementById("computerScoreBox");
+    const computerScoreLabel = document.getElementById("computerScoreLabel");
+    const plays = document.getElementById("plays");
+
+    let rockMove = function() {
+        round(this.textContent.toLowerCase());
+    }
+
+    let paperMove = function() {
+        round(this.textContent.toLowerCase());
+    }
+
+    let scissorsMove = function() {
+        round(this.textContent.toLowerCase());
+    }
+
+    let computerChoice = function() {
+        let x = Math.floor(Math.random() * 3);
+        switch(x) {
+            case 0: return "rock"; break;
+            case 1: return "paper"; break;
+            case 2: return "scissors"; break;
+            default: return "how";
         }
-        
-        function game() {
-            let playerName = prompt("What is your name?", "");
-            let playerScore = 0;
-            let computerScore = 0;
-            let scores = [playerScore, computerScore];
-            if (playerScore < 5 && computerScore < 5) {
-                round(scores);
-            }
-            else if (playerScore == 5) {
-                alert(`${playerName} HAS BEATEN THE COMPUTER!`);
-            }
-            else if (computerScore == 5) {
-                alert(`${playerName} has been defeated by the computer...`)
-            }
-        } 
-        
-        function round(playerMove) {
-                computerMove = makeComputerMove();
-                console.log(playerMove.toLowerCase());
-                console.log(computerMove);
-                switch (playerMove) {
-                case "Rock":
-                    if (computerMove == "paper") 
-                    {scoreboard.textContent = `Computer used ${computerMove}.
-                    Computer wins.`; scoreCounter(scores[1])}
-                    else if (computerMove == "scissors") 
-                    {scoreboard.textContent = `Computer used ${computerMove}.
-                    Player wins!`; scoreCounter(scores[0])}
-                    else if (computerMove == "rock") {scoreboard.textContent = `Computer used ${computerMove}.
-                    It\'s a tie!`};
-                    break;
-                
-                case "Paper":
-                    if (computerMove == "scissors") 
-                    {scoreboard.textContent = `Computer used ${computerMove}.
-                    Computer wins.`; scoreCounter(scores[1])}
-                    else if (computerMove == "rock") 
-                    {scoreboard.textContent = `Computer used ${computerMove}.
-                    Player wins!`; scoreCounter(scores[0])}
-                    else if (computerMove == "paper") {scoreboard.textContent = `Computer used ${computerMove}.
-                    It\'s a tie!`};
-                    break;
-                
-                case "Scissors":
-                    if (computerMove == "rock") 
-                    {scoreboard.textContent = `Computer used ${computerMove}.
-                    Computer wins.`; scoreCounter(scores[1])}
-                    else if (computerMove == "paper") 
-                    {scoreboard.textContent = `Computer used ${computerMove}.
-                    Player wins!`; scoreCounter(scores[0])}
-                    else if (computerMove == "scissors") {scoreboard.textContent = `Computer used ${computerMove}.
-                    It\'s a tie!`};
-                    break;
-                    
-                default: alert("oops, something went wrong");
-                    break;
-                }
-                console.log("after scoreCounter" + scores);
-                if (playerScore >= 5) {
-                    scoreboard.textContent == "Player wins!"
-                }
-                else if (computerScore >= 5) {
-                    scoreboard.textContent = "Computer wins!"
-                }
-                else {
-                    scoreboard.textContent += `Player: ${scores[0]}. Computer: ${scores[1]}`
-                    };
-                return scores;
+    }
+
+    let round = function(playerMove) {
+        if (scores[0] >= 5 || scores[1] >= 5) {
+            return;
         }
-            
-        
-
-        function scoreCounter(score) {
-            if (score == scores[0]) {scores[0]++}
-            else {scores[1]++};
-            console.log("inside scoreCounter" + scores);
-            return scores;
+        console.log(playerMove);
+        let computerMove = computerChoice();
+        plays.textContent = `Computer used ${computerMove}. `
+        // ROCK
+        if (playerMove == "rock" && computerMove == "rock") {
+            plays.textContent += "It\'s a tie!";
         }
-
-        const main = document.getElementById("main");
-
-        const playButton = document.getElementById("playButton");
-        playButton.addEventListener("click", game);
-
-        const rock = document.getElementById("rock");
-        rock.textContent = "Rock";
-
-        const paper = document.getElementById("paper");
-        paper.textContent = "Paper";
-
-        const scissors = document.getElementById("scissors");
-        scissors.textContent = "Scissors";
-
-        const scoreboard = document.getElementById("scoreboard");
-        
-        const buttons = document.querySelectorAll(".option");
-        buttons.forEach((button) => {
-            button.addEventListener("click", function () {
-                round(button.textContent);
-                console.log(scores);
-            })
+        else if (playerMove == "rock" && computerMove == "paper") {
+            plays.textContent += "Computer wins!";
+            scores[1]++;
         }
-        )
+        else if (playerMove == "rock" && computerMove == "scissors") {
+            plays.textContent += `${playerName} wins!`;
+            scores[0]++;
+        }
+        // PAPER
+        else if (playerMove == "paper" && computerMove == "rock") {
+            plays.textContent += `${playerName} wins!`;
+            scores[0]++;
+        }
+        else if (playerMove == "paper" && computerMove == "paper") {
+            plays.textContent += "It\'s a tie!";
+        }
+        else if (playerMove == "paper" && computerMove == "scissors") {
+            plays.textContent += "Computer wins!";
+            scores[1]++;
+        }
+        // SCISSORS
+        else if (playerMove == "scissors" && computerMove == "rock") {
+            plays.textContent += "Computer wins!";
+            scores[1]++;
+        }
+        else if (playerMove == "scissors" && computerMove == "paper") {
+            plays.textContent += `${playerName} wins!`;
+            scores[0]++;
+        }
+        else if (playerMove == "scissors" && computerMove == "scissors") {
+            plays.textContent += "It\'s a tie!";
+        }
+        // DEBUGGING
+        else {
+            plays.textContent += "I\'m broken :(";
+        }
+        // RESULT
+        console.log(scores);
+        playerScoreBox.textContent = scores[0];
+        computerScoreBox.textContent = scores[1];
+        if (scores[0] >= 5) {
+            capitalName = playerName.toUpperCase();
+            plays.textContent = `${capitalName} BEAT THE COMPUTER!`;
+            return;
+        }
+        else if (scores[1] >= 5) {
+            plays.textContent = `${playerName} has been defeated by the computer...`;
+            return;
+        }
+    }
+
+    let wipe = () => {
+        scores[0] = 0;
+        scores[1] = 0;
+        playerScoreBox.textContent = scores[0];
+        computerScoreBox.textContent = scores[1];
+        plays.textContent = "";
+    }
+
+    let init = () => {
+        scores[0] = 0;
+        scores[1] = 0;
+        playerName = prompt("What\'s your name?");
+        playerScoreLabel.textContent = playerName + ":";
+        playerScoreBox.textContent = "0";
+        computerScoreLabel.textContent = "Computer:"
+        computerScoreBox.textContent = "0";
+        return playerName;
+    }
+
+    rock.addEventListener("click", rockMove);
+    paper.addEventListener("click", paperMove);
+    scissors.addEventListener("click", scissorsMove);
+    play.addEventListener("click", init);
+    reset.addEventListener("click", wipe);
     </script>
     </body>
 </html>
